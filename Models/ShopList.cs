@@ -20,5 +20,8 @@ namespace Arghiroiu_Raluca_Lab7.Models
 
         [OneToMany]
         public List<ListProduct> ListProducts { get; set; }
+
+        [ForeignKey(typeof(Shop))]
+        public int ShopID { get; set; }
     }
 }

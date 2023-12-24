@@ -12,8 +12,10 @@ public partial class ListPage : ContentPage
     async void OnSaveButtonClicked(object sender, EventArgs e)
 	{
 		var slist = (ShopList)BindingContext;
+        Shop selectedShop = (ShopPicker.SelectedItem as Shop);
+		slist.ShopID = selectedShop.ID;
 		slist.Date = DateTime.UtcNow;
-		await App.Database.SaveShopListAsync(slist);
+        await App.Database.SaveShopListAsync(slist);
 		await Navigation.PopAsync();
 	}
 
@@ -35,7 +37,10 @@ public partial class ListPage : ContentPage
 	{
 		base.OnAppearing();
 
-		var slist = (ShopList)BindingContext;
+		ShopPicker.ItemsSource = await App.Database.GetShopsAsync();
+        ShopPicker.ItemDisplayBinding = new Binding("Details");
+
+        var slist = (ShopList)BindingContext;
 
 		listView.ItemsSource = await App.Database.GetListProductsAsync(slist.ID);
         deleteItemButton.IsVisible = listView.SelectedItem != null;
